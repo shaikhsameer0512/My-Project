@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bucks2Bar</title>
+        <!-- Bootstrap 5 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
+        <div class="container py-4">
+            <h1 class="mb-4">Bucks2Bar</h1>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" id="bucks2barTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="data-tab" data-bs-toggle="tab" data-bs-target="#data" type="button" role="tab" aria-controls="data" aria-selected="true">Data</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="chart-tab" data-bs-toggle="tab" data-bs-target="#chart" type="button" role="tab" aria-controls="chart" aria-selected="false">Chart</button>
+                </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content" id="bucks2barTabsContent">
+                <div class="tab-pane fade show active p-3" id="data" role="tabpanel" aria-labelledby="data-tab">
+                    <form id="dataForm">
+                        <table class="table table-bordered align-middle text-center">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Income (₹)</th>
+                                    <th>Expense (₹)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Jan</td><td><input type="number" class="form-control" name="income-0" min="0" value="800"></td><td><input type="number" class="form-control" name="expense-0" min="0" value="350"></td></tr>
+                                <tr><td>Feb</td><td><input type="number" class="form-control" name="income-1" min="0" value="950"></td><td><input type="number" class="form-control" name="expense-1" min="0" value="420"></td></tr>
+                                <tr><td>Mar</td><td><input type="number" class="form-control" name="income-2" min="0" value="700"></td><td><input type="number" class="form-control" name="expense-2" min="0" value="300"></td></tr>
+                                <tr><td>Apr</td><td><input type="number" class="form-control" name="income-3" min="0" value="600"></td><td><input type="number" class="form-control" name="expense-3" min="0" value="250"></td></tr>
+                                <tr><td>May</td><td><input type="number" class="form-control" name="income-4" min="0" value="1000"></td><td><input type="number" class="form-control" name="expense-4" min="0" value="500"></td></tr>
+                                <tr><td>Jun</td><td><input type="number" class="form-control" name="income-5" min="0" value="850"></td><td><input type="number" class="form-control" name="expense-5" min="0" value="400"></td></tr>
+                                <tr><td>Jul</td><td><input type="number" class="form-control" name="income-6" min="0" value="900"></td><td><input type="number" class="form-control" name="expense-6" min="0" value="600"></td></tr>
+                                <tr><td>Aug</td><td><input type="number" class="form-control" name="income-7" min="0" value="750"></td><td><input type="number" class="form-control" name="expense-7" min="0" value="320"></td></tr>
+                                <tr><td>Sep</td><td><input type="number" class="form-control" name="income-8" min="0" value="650"></td><td><input type="number" class="form-control" name="expense-8" min="0" value="200"></td></tr>
+                                <tr><td>Oct</td><td><input type="number" class="form-control" name="income-9" min="0" value="980"></td><td><input type="number" class="form-control" name="expense-9" min="0" value="700"></td></tr>
+                                <tr><td>Nov</td><td><input type="number" class="form-control" name="income-10" min="0" value="870"></td><td><input type="number" class="form-control" name="expense-10" min="0" value="550"></td></tr>
+                                <tr><td>Dec</td><td><input type="number" class="form-control" name="income-11" min="0" value="990"></td><td><input type="number" class="form-control" name="expense-11" min="0" value="480"></td></tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="tab-pane fade p-3" id="chart" role="tabpanel" aria-labelledby="chart-tab">
+                    <div class="d-flex justify-content-end mb-2">
+                        <button id="downloadChart" class="btn btn-primary btn-lg download-3d-btn">Download</button>
+                    </div>
+                    <canvas id="barChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Bootstrap 5 JS Bundle (with Popper) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <style>
+        /* 3D Animated Download Button */
+        .download-3d-btn {
+            background: linear-gradient(145deg, #4e9af1, #2563eb);
+            color: #fff;
+            border: none;
+            box-shadow: 0 6px 20px 0 rgba(46, 91, 255, 0.2), 0 1.5px 4px 0 rgba(0,0,0,0.15);
+            border-radius: 1.5rem;
+            padding: 0.75rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: transform 0.15s cubic-bezier(.4,2.3,.3,1), box-shadow 0.15s;
+            position: relative;
+            overflow: hidden;
+        }
+        .download-3d-btn:active {
+            transform: translateY(3px) scale(0.98);
+            box-shadow: 0 2px 8px 0 rgba(46, 91, 255, 0.15), 0 1px 2px 0 rgba(0,0,0,0.10);
+        }
+        .download-3d-btn::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 100%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+            z-index: 0;
+        }
+        .download-3d-btn:hover::after {
+            width: 250%;
+            height: 800%;
+        }
+        .download-3d-btn:hover {
+            box-shadow: 0 12px 32px 0 rgba(46, 91, 255, 0.25), 0 2px 8px 0 rgba(0,0,0,0.18);
+            transform: translateY(-2px) scale(1.03);
+        }
+        .download-3d-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem #2563eb55;
+        }
+        .download-3d-btn span {
+            position: relative;
+            z-index: 1;
+        }
+        </style>
+        <script src="script.js"></script>
+    </body>
+</html>
